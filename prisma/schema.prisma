@@ -18,7 +18,7 @@ model Movies {
   userRating Int?
   profitability Float?
   rottenTomatoes Int?
-  worldwideGross Float?
+  worldwideGross String?
   year Int?
   comments Comments[]
 }
