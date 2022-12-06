@@ -15,10 +15,10 @@ model Movies {
   name String?
   genre String?
   studio String?
-  user_rating Int?
+  userRating Int?
   profitability Float?
-  rotten_tomatoes Int?
-  worldwide_gross Float?
+  rottenTomatoes Int?
+  worldwideGross Float?
   year Int?
   comments Comments[]
 }
