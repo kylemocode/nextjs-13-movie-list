@@ -26,7 +26,7 @@ export default async function RootLayout({
       <body>
         <Header />
         <main className='flex'>
-          <div className='border-r-2 p-1 pr-2 overflow-y-scroll h-[calc(100vh-76px)]'>
+          <div className='border-r-2 p-1.5 pr-2 overflow-y-scroll h-[calc(100vh-76px)]'>
             {/* TypeScript doesn't support async server component for now */}
             {/* @ts-ignore */}
             <MoviesList movies={movies} />

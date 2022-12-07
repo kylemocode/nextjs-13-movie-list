@@ -1,6 +1,11 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { Movies } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import CommentsList from './CommentsList';
+
+type MovieWithComments = Prisma.MoviesGetPayload<{
+  include: { comments: true };
+}>;
 
 type PageProps = {
   params: {
@@ -12,7 +17,7 @@ const fetchMovie = async (movieId: string) => {
   const res = await fetch(`${process.env.BASE_URL}/api/movie/${movieId}`, {
     cache: 'no-store',
   });
-  const movie: Movies = await res.json();
+  const movie: MovieWithComments = await res.json();
   return movie;
 };
 
@@ -20,7 +25,7 @@ async function MovieDetail({ params: { movieId } }: PageProps) {
   const movie = await fetchMovie(movieId);
 
   if (!movie.id) return notFound();
-  console.log(movie);
+
   return (
     <div className='p-10 bg-gray-100 border-2 m-2 shadow-lg'>
       <p className='text-xl font-medium mb-2'>
@@ -33,7 +38,10 @@ async function MovieDetail({ params: { movieId } }: PageProps) {
       <p>Rotten Tomatoes Rating: {movie.rottenTomatoes}%</p>
       <p>World Wide Gross: {movie.worldwideGross}m</p>
       <p>Release Year: {movie.year}</p>
-      <p className='border-t border-black mt-5 text-left pt-2'>comments:</p>
+      <p className='border-t border-black mt-5 text-left pt-2 text-xl font-medium'>
+        comments:
+      </p>
+      <CommentsList comments={movie.comments} movieId={movie.id} />
     </div>
   );
 }
