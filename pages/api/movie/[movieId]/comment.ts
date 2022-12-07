@@ -19,7 +19,7 @@ export default async function handler(
       content,
       movie: {
         connect: {
-          id: parseInt(movieId),
+          id: parseInt(movieId as string),
         },
       },
     },
