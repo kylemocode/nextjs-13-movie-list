@@ -1,8 +1,10 @@
 name: main workflow
-on: 
-  push
+on:
+  push:
+    branches:
+      - main
   pull_request:
-    type: opened
+    branches: '**'
 
 jobs:
   build:
