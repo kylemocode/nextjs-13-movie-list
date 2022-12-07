@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import { Suspense } from 'react';
 import { Movies } from '@prisma/client';
 import Header from './Header';
 import MoviesList from './MoviesList';
@@ -27,9 +28,11 @@ export default async function RootLayout({
         <Header />
         <main className='flex'>
           <div className='border-r-2 p-1.5 pr-2 overflow-y-scroll h-[calc(100vh-76px)]'>
-            {/* TypeScript doesn't support async server component for now */}
-            {/* @ts-ignore */}
-            <MoviesList movies={movies} />
+            <Suspense fallback={<p>Loading the movies...</p>}>
+              {/* TypeScript doesn't support async server component for now */}
+              {/* @ts-ignore */}
+              <MoviesList movies={movies} />
+            </Suspense>
           </div>
           <div className='flex-1 p-10'>{children}</div>
         </main>
