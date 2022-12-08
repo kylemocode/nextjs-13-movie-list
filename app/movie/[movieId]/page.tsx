@@ -1,11 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { Prisma } from '@prisma/client';
+import { Movies } from '@prisma/client';
 import CommentsList from './CommentsList';
-
-type MovieWithComments = Prisma.MoviesGetPayload<{
-  include: { comments: true };
-}>;
 
 type PageProps = {
   params: {
@@ -17,7 +13,7 @@ const fetchMovie = async (movieId: string) => {
   const res = await fetch(`${process.env.BASE_URL}/api/movie/${movieId}`, {
     cache: 'no-store',
   });
-  const movie: MovieWithComments = await res.json();
+  const movie: Movies = await res.json();
   return movie;
 };
 
@@ -41,7 +37,7 @@ async function MovieDetail({ params: { movieId } }: PageProps) {
       <p className='border-t border-black mt-5 text-left pt-2 text-xl font-medium'>
         comments:
       </p>
-      <CommentsList comments={movie.comments} movieId={movie.id} />
+      <CommentsList movieId={movie.id} />
     </div>
   );
 }

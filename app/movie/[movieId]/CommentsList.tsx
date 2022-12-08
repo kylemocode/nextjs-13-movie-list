@@ -1,19 +1,18 @@
 'use client';
 
-import { FC, FormEvent, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { FC, FormEvent, useMemo, useState, useEffect } from 'react';
 import { Comments } from '@prisma/client';
 
 interface ICommentsListProps {
   movieId: number;
-  comments: Comments[];
 }
 
-const CommentsList: FC<ICommentsListProps> = ({ comments, movieId }) => {
-  const router = useRouter();
+const CommentsList: FC<ICommentsListProps> = ({ movieId }) => {
   const [author, setAuthor] = useState('');
   const [comment, setComment] = useState('');
+  const [commentsData, setCommentsData] = useState<Comments[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,7 +25,7 @@ const CommentsList: FC<ICommentsListProps> = ({ comments, movieId }) => {
       setIsSubmitting(true);
       const body = { author, content: comment };
 
-      await fetch(`/api/movie/${movieId}/comment`, {
+      await fetch(`/api/movie/${movieId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -34,7 +33,6 @@ const CommentsList: FC<ICommentsListProps> = ({ comments, movieId }) => {
 
       setAuthor('');
       setComment('');
-      router.refresh();
     } catch (error) {
       console.log(error);
     } finally {
@@ -43,17 +41,32 @@ const CommentsList: FC<ICommentsListProps> = ({ comments, movieId }) => {
   };
 
   const commentsContent = useMemo(() => {
-    if (!comments.length) {
+    if (isLoading) {
+      return <p className='text-red-300'>Loading...</p>;
+    }
+
+    if (!commentsData.length && !isLoading) {
       return <p className='text-red-300'>There is no comment now.</p>;
     }
 
-    return comments.map(comment => (
+    return commentsData.map(comment => (
       <div key={comment.id} className='p-2 bg-white rounded-md mt-1 mb-2'>
         <p>Author: {comment.author}</p>
         <p>Content: {comment.content}</p>
       </div>
     ));
-  }, [comments]);
+  }, [commentsData, isLoading]);
+
+  useEffect(() => {
+    if (isSubmitting) return;
+
+    fetch(`/api/movie/${movieId}/comments`)
+      .then(res => res.json())
+      .then(data => {
+        setCommentsData(data);
+        setIsLoading(false);
+      });
+  }, [movieId, isSubmitting]);
 
   return (
     <>
