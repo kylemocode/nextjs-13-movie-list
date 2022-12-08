@@ -35,6 +35,23 @@ const MoviesList: FC<IMoviesListProps> = ({ movies }) => {
     return movie.name?.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  const filteredContent = useMemo(() => {
+    if (!filteredMovies.length) {
+      return <p>No match movie</p>;
+    }
+
+    return filteredMovies.map(movie => (
+      <p
+        key={movie.id}
+        className='p-1.5 transition-colors hover:bg-black hover:text-white rounded-md'
+      >
+        <Link href={`/movie/${movie.id}`} prefetch={false}>
+          {movie.name}
+        </Link>
+      </p>
+    ));
+  }, [filteredMovies]);
+
   useEffect(() => {
     return () => {
       debouncedResults.cancel();
@@ -49,13 +66,7 @@ const MoviesList: FC<IMoviesListProps> = ({ movies }) => {
         onChange={debouncedResults}
         className='border-2 p-1 rounded-md mb-2'
       />
-      {filteredMovies.map(movie => (
-        <p key={movie.id} className='p-1'>
-          <Link href={`/movie/${movie.id}`} prefetch={false}>
-            {movie.name}
-          </Link>
-        </p>
-      ))}
+      {filteredContent}
     </>
   );
 };
