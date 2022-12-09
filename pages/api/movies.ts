@@ -4,8 +4,12 @@ import { Movies } from '@prisma/client';
 
 export default async function handler(
   _req: NextApiRequest,
-  res: NextApiResponse<Movies[]>
+  res: NextApiResponse<Movies[] | String>
 ) {
-  const movies = await prisma.movies.findMany();
-  res.status(200).send(movies);
+  try {
+    const movies = await prisma.movies.findMany();
+    return res.status(200).send(movies);
+  } catch {
+    return res.status(500).send('Internal Server Error');
+  }
 }

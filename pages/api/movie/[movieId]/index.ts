@@ -4,19 +4,25 @@ import { Movies } from '@prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Movies | null>
+  res: NextApiResponse<Movies | String | null>
 ) {
-  const { movieId } = req.query;
+  let { movieId } = req.query;
 
   if (!movieId) {
-    return res.status(404);
+    return res.status(404).send('Need movieId');
   }
 
-  const movie = await prisma.movies.findUnique({
-    where: {
-      id: parseInt(movieId as string),
-    },
-  });
+  if (Array.isArray(movieId)) [movieId] = movieId;
 
-  res.status(200).send(movie);
+  try {
+    const movie = await prisma.movies.findUnique({
+      where: {
+        id: parseInt(movieId),
+      },
+    });
+
+    return res.status(200).send(movie);
+  } catch {
+    return res.status(500).send('Internal Server Error');
+  }
 }
