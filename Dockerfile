@@ -1,8 +1,10 @@
-FROM node:16.14.0
+FROM node:16-slim
 
 WORKDIR /app
 
 COPY package.json package-lock.json /app/
+RUN apt-get update
+RUN apt-get install -y openssl
 RUN yarn
 
 COPY . .
