@@ -35,17 +35,5 @@ export default async function handler(
     }
   }
 
-  if (req.method === 'GET') {
-    try {
-      const comments = await prisma.comments.findMany({
-        where: {
-          movieId: parseInt(movieId),
-        },
-      });
-
-      return res.status(200).send(comments);
-    } catch {
-      return res.status(500).send('Internal Server Error');
-    }
-  }
+  return;
 }

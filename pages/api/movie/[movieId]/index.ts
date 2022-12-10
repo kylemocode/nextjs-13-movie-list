@@ -19,6 +19,9 @@ export default async function handler(
       where: {
         id: parseInt(movieId),
       },
+      include: {
+        comments: true,
+      },
     });
 
     return res.status(200).send(movie);
