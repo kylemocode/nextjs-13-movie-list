@@ -7,6 +7,7 @@ A simple full-stack movie list application which built with NextJS v13 & Prisma 
 ## Quick Start
 
 use [docker image](https://hub.docker.com/r/oldmo860617/movier-final) uploaded to Docker Hub
+
 make sure you have docker installed locally
 
 ```shell
@@ -76,7 +77,7 @@ All commit message is started with emoji from [gitmoji](https://gitmoji.dev/) so
 
 ## TODO List & Roadmap
 
-- [] Responsive Design
-- [] Redis Cache to cache DB data if necessary
-- [] Optimistic Updates using some Stale-While-Revalidate fetching libary and cooperate with in memory cache mechanism
-- [] DELETE & UPDATE comments functionalities
+- [ ] Responsive Design
+- [ ] Redis Cache to cache DB data if necessary
+- [ ] Optimistic Updates using some Stale-While-Revalidate fetching libary and cooperate with in memory cache mechanism
+- [ ] DELETE & UPDATE comments functionalities
